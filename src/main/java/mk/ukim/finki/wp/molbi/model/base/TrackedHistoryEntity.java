@@ -27,7 +27,6 @@ public class TrackedHistoryEntity {
     private static transient ObjectMapper objectMapper = new ObjectMapper();
 
     static {
-        // todo: uncomment next line in the target project
         objectMapper.registerModule(new JSR310Module());
     }
 
@@ -43,7 +42,6 @@ public class TrackedHistoryEntity {
     @PrePersist
     public void addHistory() {
         this.lastUpdateTime = LocalDateTime.now();
-        /* todo: uncomment this code in the target project*/
         if (SecurityContextHolder.getContext() != null &&
                 SecurityContextHolder.getContext().getAuthentication() != null) {
             this.lastUpdateUser = SecurityContextHolder.getContext().getAuthentication().getName();

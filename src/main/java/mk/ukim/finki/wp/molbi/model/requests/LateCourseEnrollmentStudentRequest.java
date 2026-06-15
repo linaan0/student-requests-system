@@ -27,7 +27,6 @@ public class LateCourseEnrollmentStudentRequest extends StudentRequest {
 
     @Override
     public boolean canBeApproved() {
-        //return isApproved == null && Boolean.TRUE.equals(professorApproved);
         return professorApproved!=null;
     }
 

@@ -15,7 +15,6 @@
     <p><b>Предмет:</b> <span th:text="${request.joinedSubject?.name}"></span></p>
     <p><b>Професор:</b> <span th:text="${request.professor?.name}"></span></p>
     <p><b>Опис:</b> <span th:text="${!request.description.isBlank()}?${request.description}:'Нема опис'"></span></p>
-<!--    <p><b>Одобрено од професор:</b> <span th:text="${request.professorApproved}?'Да':'Не'"></span></p>-->
     <p><b>Одобрено:</b> <span th:text="${request.isApproved!=null and request.isApproved}?'Да':'Не'"></span></p>
     <p th:if="${request.isApproved!=null and request.isApproved}"><b>Спроведено:</b> <span th:text="${request.isProcessed!=null and request.isProcessed}?'Да':'Не'"></span></p>
     <p th:if="${request.isApproved!=null and  !request.isApproved}"><b>Причина за одбивање на молбата: </b> <span th:text="${request.getRejectionReason()}"></span></p>

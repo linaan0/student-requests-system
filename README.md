@@ -64,7 +64,7 @@ The project follows a layered architecture:
 |  Professor     | Approves academic requests (e.g. late enrollment) |
 |  Dean Finance  | Handles financial-related requests |
 |  Dean Studies  | Oversees academic policies |
-|  Admin         | System-wide management |
+
 
 ---
 
@@ -152,6 +152,12 @@ Overview of submitted requests.
 Request type selection.
 
 ![Choose request type - Student](screenshots/student-choose-request-type.png)
+
+New request.
+
+![Create new request - Student](screenshots/student-new-request.png)
+
+
 
 ### Academic Affairs Vice Dean View
 Overview of submitted requests awaiting review.

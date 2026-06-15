@@ -30,9 +30,6 @@ public class Professor {
 
     private Short orderingRank;
 
-//    @ManyToOne
-//    private Room office;
-
     private boolean active;
 
 

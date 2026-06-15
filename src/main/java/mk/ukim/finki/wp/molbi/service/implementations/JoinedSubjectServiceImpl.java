@@ -22,7 +22,6 @@ public class JoinedSubjectServiceImpl implements JoinedSubjectService {
 
     @Override
     public List<JoinedSubject> findSubjectsWithUnmetRequirements(Student student) {
-        //return List.of();
         return repository.findAll();
     }
 }

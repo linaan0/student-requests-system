@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.molbi.service.email;
+package mk.ukim.finki.wp.molbi.service.implementations;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

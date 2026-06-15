@@ -46,7 +46,6 @@ public abstract class StudentRequest {
     private Boolean isProcessed;
 
     public boolean canBeApproved() {
-        //return isApproved == null;
         return true;
     }
 

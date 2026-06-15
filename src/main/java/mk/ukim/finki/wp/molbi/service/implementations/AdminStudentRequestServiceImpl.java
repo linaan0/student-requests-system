@@ -31,7 +31,6 @@ public class AdminStudentRequestServiceImpl implements AdminStudentRequestServic
                                                   Long sessionId,
                                                   List<RequestType> allowedTypes) {
         if (type != null) {
-            // постоечки switch — типот е веќе валидиран во контролерот
             return switch (type) {
                 case GENERAL, PAYMENT_DISCOUNT_SINGLE_PARENT -> generalService.findAll(page, size, isApproved, isProcessed, sessionId);
                 case INSTALLMENT_PAYMENT -> installmentService.findAll(page, size, isApproved, isProcessed, sessionId);

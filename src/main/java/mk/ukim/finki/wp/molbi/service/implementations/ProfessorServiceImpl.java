@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ProfessorServiceImpl implements ProfessorService {
     private final ProfessorRepository professorRepository;
-//    private final TeacherSubjectAllocationsRepository allocationRepository;
 
     @Override
     public List<Professor> getAllProfessors() {

@@ -13,10 +13,8 @@ public class InstallmentRequestForm {
     @NotNull
     private Long sessionId;
 
-//    @NotBlank
     private String description;
 
     @NotNull
-    //@Min(2)
     private Integer installmentsNum;
 }

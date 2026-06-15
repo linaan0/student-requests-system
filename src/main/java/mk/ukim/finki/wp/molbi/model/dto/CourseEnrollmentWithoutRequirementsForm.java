@@ -15,6 +15,5 @@ public class CourseEnrollmentWithoutRequirementsForm {
     @NotBlank
     private String joinedSubjectId;
 
-//    @NotBlank
     private String description;
 }

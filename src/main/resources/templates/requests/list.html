@@ -43,13 +43,9 @@
             <td th:if="${!r.description.isBlank()}" th:text="${r.description}"></td>
             <td th:if="${r.description.isBlank()}"  class="text-secondary">Нема опис</td>
             <td>
-<!--                ako nema status -->
                 <span th:if="${r.isApproved==null}" class="badge bg-secondary">Во обработка</span>
-<!--               ako e odobreno -->
                 <span th:if="${r.isApproved!=null and r.isApproved==true and r.isProcessed==null}" class="badge bg-success">Одобрено</span>
-<!--                ako e sprovedeno-->
                 <span th:if="${r.isProcessed!=null and r.isProcessed}" class="badge bg-success">Одобрено, спроведено</span>
-<!--                ako e odbieno-->
                     <span th:if="${r.isApproved!=null and r.isApproved==false}" class="badge bg-danger">Одбиено</span>
 
 

@@ -12,7 +12,6 @@ public class LateCourseEnrollmentForm {
     @NotNull
     private Long sessionId;
 
-//    @NotBlank
     private String description;
 
     @NotBlank

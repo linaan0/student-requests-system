@@ -40,9 +40,6 @@ public class Semester {
     @Enumerated(EnumType.STRING)
     private List<StudyCycle> cycle;
 
-//    @Enumerated(EnumType.STRING)
-//    private SemesterState state;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

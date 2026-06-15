@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Поднеси молба</title>
+    <style>
+        .request-card.inactive {
+            opacity: 0.6;
+        }
+
+    </style>
+</head>
+<body>
+
+<div layout:fragment="content" class="ct">
+    <h1 class="fw-light fs-1 pb-0 pt-4">Поднеси молба</h1>
+    <p class="text-muted">Избери тип на молба која сакаш да ја поднесеш:</p>
+
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 request-card"
+                 th:classappend="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).GENERAL)} ? '' : 'inactive'">
+                <div class="card-body d-flex flex-column ">
+                    <h5 class="card-title">Општа молба</h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        Молби од било кој тип кој не е наведен во категориите подолу, на пример молба за намалена партиципација за студенти од еднородителски семејства.
+                    </p>
+                    <a th:if="${activeSessions!=null and activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).GENERAL)}"
+                       th:href="@{/requests/general/new}" class="btn btn-primary " style="margin-bottom: 29px">Поднеси молба</a>
+                    <div class="container-fluid m-0 p-0" th:unless="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).GENERAL)}">
+                        <button class="btn btn-secondary w-100" disabled>Поднеси молба</button>
+                        <div>
+                            <span class="badge bg-danger-subtle text-danger mt-2">
+                                 Нема активна сесија
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 request-card"
+                 th:classappend="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).INSTALLMENT_PAYMENT)} ? '' : 'inactive'">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Молба за плаќање на рати</h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        При креирање на молбата за плаќање на рати, студентот го одбира бројот на рати. Електронските молби ќе бидат разгледани од продеканот за финансии.
+                    </p>
+                    <a th:if="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).INSTALLMENT_PAYMENT)}"
+                       th:href="@{/requests/installment/new}" class="btn btn-primary" style="margin-bottom: 29px">Поднеси молба</a>
+                    <div th:unless="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).INSTALLMENT_PAYMENT)}">
+
+                        <button class="btn btn-secondary w-100" disabled>Поднеси молба</button>
+                        <div>
+                            <span class="badge bg-danger-subtle text-danger mt-2">
+                                 Нема активна сесија
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 request-card"
+                 th:classappend="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).STUDY_PROGRAM_CHANGE)} ? '' : 'inactive'">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Молба за промена на студиска програма</h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        Електронските молби ќе бидат разгледани од продеканот за настава.
+                    </p>
+                    <a th:if="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).STUDY_PROGRAM_CHANGE)}"
+                       th:href="@{/requests/change-program/new}" class="btn btn-primary" style="margin-bottom: 29px">Поднеси молба</a>
+                    <div th:unless="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).STUDY_PROGRAM_CHANGE)}">
+                        <button class="btn btn-secondary w-100" disabled>Поднеси молба</button>
+                        <div>
+                            <span class="badge bg-danger-subtle text-danger mt-2">
+                                 Нема активна сесија
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 request-card"
+                 th:classappend="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).COURSE_GROUP_CHANGE)} ? '' : 'inactive'">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Молба за промена на професор</h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        Молбите важат само за студенти од прва година. Електронските молби ќе бидат разгледани од продеканот за настава.
+                    </p>
+                    <a th:if="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).COURSE_GROUP_CHANGE)}"
+                       th:href="@{/requests/course-group-change/new}" class="btn btn-primary" style="margin-bottom: 29px">Поднеси молба</a>
+                    <div th:unless="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).COURSE_GROUP_CHANGE)}">
+                        <button class="btn btn-secondary w-100" disabled>Поднеси молба</button>
+                        <div>
+                            <span class="badge bg-danger-subtle text-danger mt-2">
+                                 Нема активна сесија
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 request-card"
+                 th:classappend="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).LATE_COURSE_ENROLLMENT)} ? '' : 'inactive'">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Молба за задоцнето запишување на предмет</h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        Електронските молби ќе бидат разгледани од соодветниот професор и продеканот за настава.
+                    </p>
+                    <a th:if="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).LATE_COURSE_ENROLLMENT)}"
+                       th:href="@{/requests/late-enrollment/new}" class="btn btn-primary" style="margin-bottom: 29px">Поднеси молба</a>
+                    <div th:unless="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).LATE_COURSE_ENROLLMENT)}">
+                        <button class="btn btn-secondary w-100" disabled>Поднеси молба</button>
+                        <div>
+                            <span class="badge bg-danger-subtle text-danger mt-2">
+                                 Нема активна сесија
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 request-card"
+                 th:classappend="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).COURSE_ENROLLMENT_WITHOUT_REQUIREMENTS)} ? '' : 'inactive'">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Молба за запишување на предмет без исполнет предуслов</h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        Молбите важат само за студенти од старите студиски програми акредитирани во 2013 година и за студентите кои имаат над 180 кредити.
+                    </p>
+                    <a th:if="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).COURSE_ENROLLMENT_WITHOUT_REQUIREMENTS)}"
+                       th:href="@{/requests/enrollment-requirements/new}" class="btn btn-primary" style="margin-bottom: 29px">Поднеси молба</a>
+                    <div th:unless="${activeSessions.containsKey(T(mk.ukim.finki.wp.molbi.model.enums.RequestType).COURSE_ENROLLMENT_WITHOUT_REQUIREMENTS)}">
+                        <button class="btn btn-secondary w-100" disabled>Поднеси молба</button>
+                        <div>
+                            <span class="badge bg-danger-subtle text-danger mt-2">
+                                 Нема активна сесија
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <a  th:href="@{/requests}" class="btn btn-link mt-3"><i class="fa-solid fa-arrow-left pe-3"></i>Назад кон мои молби</a>
+</div>
+</body>
+</html>

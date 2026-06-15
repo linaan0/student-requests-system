@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Молба за задоцнето запишување на предмет</title>
+</head>
+<body>
+<div layout:fragment="content" class="container py-4">
+    <h1 class="fw-light fs-1 pb-4 pt-2">Молба за задоцнето запишување на предмет</h1>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="@{/requests/late-enrollment}" method="post" th:object="${form}">
+
+        <input type="hidden" th:field="*{sessionId}" th:value="${session.id}"/>
+
+        <p th:text="${session.description}"></p>
+
+        <div class="mb-3">
+            <label class="form-label">Предмет:</label>
+            <select class="form-select" th:field="*{joinedSubjectId}">
+                <option th:each="s : ${subjects}"
+                        th:value="${s.abbreviation}"
+                        th:text="${s.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Професор:</label>
+            <select class="form-select" th:field="*{professorId}">
+                <option th:each="p : ${professors}"
+                        th:value="${p.id}"
+                        th:text="${p.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Опис:</label>
+            <textarea class="form-control" th:field="*{description}"></textarea>
+        </div>
+        <div class="form-text mb-3" role="alert">
+            <i class="bi bi-info-circle-fill me-2 "></i>
+            При промена на статусот на молбата ќе добиете е-mail известување.
+        </div>
+        <button type="submit" class="btn btn-primary">Поднеси молба</button>
+        <a th:href="@{/requests}" class="btn btn-secondary">Откажи</a>
+    </form>
+
+</div>
+</body>
+</html>

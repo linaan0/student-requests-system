@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Уреди сесија за молба</title>
+</head>
+<body>
+<div layout:fragment="content" class="container py-4">
+    <h1 class="fw-light fs-1 pb-4 pt-2" th:text="${sessionId != null ? 'Уреди сесија за молба' : 'Креирај сесија за молба'}"></h1>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="${sessionId != null}
+        ? @{/admin/sessions/{id}(id=${sessionId})}
+        : @{/admin/sessions}"
+          method="post"
+          th:object="${form}">
+
+        <div class="mb-3">
+            <label class="form-label">Активна од:</label>
+            <label>
+                <input type="datetime-local" class="form-control" th:field="*{timeFrom}" />
+            </label>
+            <div class="text-danger small"
+                 th:errors="*{timeFrom}">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Активна до:</label>
+            <label>
+                <input type="datetime-local"
+                       class="form-control"
+                       th:field="*{timeTo}"
+                       th:value="${form.timeTo != null ? #temporals.format(form.timeTo, 'yyyy-MM-dd''T''HH:mm') : ''}" />
+            </label>
+            <div class="text-danger small"
+                 th:if="${#fields.hasErrors('timeTo')}"
+                 th:errors="*{timeTo}">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Семестар:</label>
+            <label>
+                <select class="form-select" th:field="*{semesterId}">
+                    <option th:each="s : ${semesters}"
+                            th:value="${s.code}"
+                            th:text="${s.code}">
+                    </option>
+                </select>
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Тип на молба:</label>
+            <label>
+                <select class="form-select" th:field="*{requestType}">
+                    <option th:each="t : ${requestTypes}"
+                            th:value="${t}"
+                            th:text="${t.displayName}">
+                    </option>
+                </select>
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Опис:</label>
+            <textarea class="form-control" th:field="*{description}"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Забелешка за одобрување:</label>
+            <textarea class="form-control" th:field="*{approvalNote}"></textarea>
+        </div>
+        <a  th:href="@{/admin/sessions}" class="btn btn-secondary me-3">Назад</a>
+        <button type="submit" class="btn btn-primary f">Зачувај</button>
+
+    </form>
+
+
+</div>
+</body>
+</html>

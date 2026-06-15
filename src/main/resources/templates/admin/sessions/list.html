@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Сесии за поднесување молби</title>
+</head>
+<body>
+<div layout:fragment="content" class="container py-4">
+    <h1 class="fw-light fs-1 pb-4 pt-2">Сесии за поднесување молби</h1>
+    <a th:href="@{/admin/sessions/new}" class="btn btn-primary f mb-4">Креирај нова сесија</a>
+    <form method="get" th:action="@{/admin/sessions}" class="row g-2 mb-3">
+
+        <div class="col-auto">
+            <label class="form-label">Активна од</label>
+            <input type="datetime-local" name="from" class="form-control"
+                   th:value="${from != null ? #temporals.format(from, 'yyyy-MM-dd''T''HH:mm') : ''}">
+        </div>
+
+        <div class="col-auto">
+            <label class="form-label">Активна до</label>
+            <input type="datetime-local" name="to" class="form-control"
+                   th:value="${to != null ? #temporals.format(to, 'yyyy-MM-dd''T''HH:mm') : ''}">
+        </div>
+
+        <div class="col-auto">
+            <label class="form-label">Семестар</label>
+            <select name="semesterCode" class="form-select">
+                <option value="">Сите</option>
+                <option th:each="s : ${semesters}"
+                        th:value="${s.code}"
+                        th:text="${s.code}"
+                        th:selected="${semesterCode != null and s.code == semesterCode}">
+                </option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label class="form-label">Тип</label>
+            <select name="type" class="form-select">
+                <option value="">Сите</option>
+                <option th:each="t : ${requestTypes}"
+                        th:value="${t}"
+                        th:text="${t.displayName}"
+                        th:selected="${type != null and t == type}">
+                </option>
+            </select>
+        </div>
+
+        <div class="col-auto align-self-end">
+            <button type="submit" class="btn btn-primary f">Филтер</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Тип</th>
+            <th>Семестар</th>
+            <th>Активна од</th>
+            <th>Активна до</th>
+            <th>Aкции</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="s : ${sessions.content}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${s.requestType.displayName}"></td>
+            <td th:text="${s.semester?.code}"></td>
+            <td th:text="${s.timeFrom}"></td>
+            <td th:text="${s.timeTo}"></td>
+            <td>
+                <a th:href="@{'/admin/sessions/' + ${s.id}}">Детали</a>
+                <a th:href="@{'/admin/sessions/' + ${s.id} + '/edit'}">Уреди</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="~{fragments/paging :: pageSection(${sessions})}"></div>
+
+
+</div>
+</body>
+</html>

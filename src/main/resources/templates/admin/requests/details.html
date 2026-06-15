@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Детали за молбата</title>
+</head>
+<body>
+<div layout:fragment="content" class="container py-4">
+    <h1 class="fw-light fs-1 pb-4 pt-2">Детали за молбата</h1>
+
+    <div th:if="${param.error}" class="alert alert-danger" th:text="${param.error}"></div>
+
+    <p><b>ID:</b> <span th:text="${request.id}"></span></p>
+    <p><b>Тип:</b> <span th:text="${type.displayName}"></span></p>
+    <p><b>Студент:</b> <span th:text="${request.student?.index}"></span></p>
+    <p><b>Датум на поднесување:</b> <span th:text="${request.dateCreated}"></span></p>
+    <p><b>Опис:</b> <span th:text="${request.description}"></span></p>
+
+    <div th:switch="${type}">
+        <div th:case="'INSTALLMENT_PAYMENT'">
+            <p><b>Број на рати:</b> <span th:text="${request.installmentsNum}"></span></p>
+        </div>
+        <div th:case="'STUDY_PROGRAM_CHANGE'">
+            <p><b>Стара студентска програма:</b> <span th:text="${request.oldStudyProgram?.name}"></span></p>
+            <p><b>Нова студентска програма:</b> <span th:text="${request.newStudyProgram?.name}"></span></p>
+        </div>
+        <div th:case="'COURSE_GROUP_CHANGE'">
+            <p><b>Предмет:</b> <span th:text="${request.joinedSubject?.name}"></span></p>
+            <p><b>Тековен професор:</b> <span th:text="${request.currentProfessor?.name}"></span></p>
+            <p><b>Нов професор:</b> <span th:text="${request.newProfessor?.name}"></span></p>
+        </div>
+        <div th:case="'LATE_COURSE_ENROLLMENT'">
+            <p><b>Предмет:</b> <span th:text="${request.joinedSubject?.name}"></span></p>
+            <p><b>Професор:</b> <span th:text="${request.professor?.name}"></span></p>
+            <p><b>Одобрено од професор:</b> <span th:text="${request.professorApproved}"></span></p>
+        </div>
+        <div th:case="'COURSE_ENROLLMENT_WITHOUT_REQUIREMENTS'">
+            <p><b>Предмет:</b> <span th:text="${request.joinedSubject?.name}"></span></p>
+        </div>
+    </div>
+
+    <p><b>Одобрено:</b> <span th:text="${request.isApproved}? 'Да':'Не'"></span></p>
+    <p><b>Обработено:</b> <span th:text="${request.isProcessed}? 'Да':'Не'"></span></p>
+
+    <div th:if="${request.isApproved == false && request.isProcessed == true}">
+        <p><b>Причина за одбивање на молбата:</b> <span th:text="${request.rejectionReason}"></span></p>
+    </div>
+
+
+    <div  class="d-flex gap-2 mb-2">
+        <hr/>
+        <form th:if="${request.isApproved !=null and request.isApproved !=null and request.isApproved !=true and request.isProcessed!=true}"
+              th:action="@{'/admin/requests/' + ${type} + '/' + ${request.id} + '/approve'}" method="post">
+            <input type="hidden" name="redirectUrl" th:value="@{'/admin/requests/' + ${type} + '/' + ${request.id}}">
+            <button type="submit" class="btn btn-success">Одобри</button>
+        </form>
+
+        <form th:if="${request.isApproved ==true and request.isProcessed!=true}"
+              th:action="@{'/admin/requests/' + ${type} + '/' + ${request.id} + '/mark-as-processed'}" method="post">
+            <input type="hidden" name="redirectUrl" th:value="@{'/admin/requests/' + ${type} + '/' + ${request.id}}">
+            <button type="submit" class="btn btn-success">Означи како спроведено</button>
+        </form>
+
+        <div th:if="${request.isProcessed!=true}" class="d-block">
+            <form th:action="@{'/admin/requests/' + ${type} + '/' + ${request.id} + '/reject'}" method="post" class="d-flex gap-2">
+                <input type="hidden" name="redirectUrl" th:value="@{'/admin/requests/' + ${type} + '/' + ${request.id}}">
+                <input type="text" name="reason" placeholder="Причина за одбивање" class="form-control" required/>
+                <button type="submit" class="btn btn-danger">Одбиј</button>
+            </form>
+        </div>
+    </div>
+
+    <a th:href="@{/admin/requests}" class="btn btn-secondary">Назад</a>
+</div>
+</body>
+</html>

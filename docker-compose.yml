@@ -1,0 +1,20 @@
+version: "3"
+services:
+  molbi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finki_molbi
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://finki_services_db:5432/finki-services-db
+      - spring.datasource.password=${DB_PASSWORD}
+      - spring.jpa.show-sql=false
+    networks:
+      - common-model_finki_services_net
+
+
+networks:
+  common-model_finki_services_net:
+    external: true

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<body>
+<header class="p-3 text-bg-dark" th:fragment="header">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start d-print-none px-4">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <img src="/io.png" style="width: 25px"/>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+
+            <li sec:authorize="hasRole('ROLE_STUDENT')" >
+                <a href="/requests" class="nav-link px-3 text-white m">Мои молби</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_STUDENT')" >
+                <a href="/requests/new" class="nav-link px-3 text-white m">Нова молба</a>
+            </li>
+
+            <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_FINANCE_ADMIN')" >
+                <a href="/admin/sessions/new" class="nav-link px-3 text-white m">Креирај нова сесија</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_FINANCE_ADMIN')" >
+                <a href="/admin/sessions" class="nav-link px-3 text-white m">Сесии за молби</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_FINANCE_ADMIN')" >
+                <a  href="/admin/requests" class="nav-link px-3 text-white m">Преглед на молби</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_PROFESSOR')" >
+                <a  href="/professor/requests/late-enrollment" class="nav-link px-5 text-white m">Преглед на молби</a>
+            </li>
+
+        </ul>
+
+        <div class="text-end" sec:authorize="isAuthenticated()">
+            <span sec:authentication="name"></span>
+
+            <span class="px-1" sec:authorize="hasRole('ROLE_STUDENT')">
+                <i class="fa-solid fa-user me-1"></i>
+            </span>
+
+            <span class="px-1" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_FINANCE_ADMIN') or hasRole('ROLE_PROFESSOR')">
+                <i class="fa-solid fa-graduation-cap me-1 "></i>
+            </span>
+
+            <!--            <span sec:authentication="principal.authorities"></span>-->
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-sm btn-outline-light ms-2">Одјави се</button>
+            </form>
+        </div>
+    </div>
+
+</header>
+</body>
+</html>

@@ -2,6 +2,7 @@ package mk.ukim.finki.wp.molbi.model.base;
 
 import jakarta.persistence.*;
 import lombok.*;
+import mk.ukim.finki.wp.molbi.model.enums.SemesterState;
 import mk.ukim.finki.wp.molbi.model.enums.SemesterType;
 import mk.ukim.finki.wp.molbi.model.enums.StudyCycle;
 import org.hibernate.Hibernate;
@@ -39,6 +40,9 @@ public class Semester {
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private List<StudyCycle> cycle;
+
+    @Enumerated(EnumType.STRING)
+    private SemesterState state;
 
     @Override
     public boolean equals(Object o) {

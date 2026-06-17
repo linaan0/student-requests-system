@@ -83,6 +83,11 @@ The system automatically sends email notifications when a request status changes
 - Thymeleaf email templates
 
 ---
+## Authentication
+
+The application is designed to integrate with the FCSE CAS authentication system.
+For development purposes, a simplified login mechanism is used instead of the actual CAS server.
+---
 
 ##  Tech Stack
 

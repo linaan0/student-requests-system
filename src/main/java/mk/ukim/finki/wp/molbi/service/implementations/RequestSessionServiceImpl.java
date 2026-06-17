@@ -8,6 +8,7 @@ import mk.ukim.finki.wp.molbi.model.enums.RequestType;
 import mk.ukim.finki.wp.molbi.model.requests.RequestSession;
 import mk.ukim.finki.wp.molbi.repository.RequestSessionRepository;
 import mk.ukim.finki.wp.molbi.repository.SemesterRepository;
+import mk.ukim.finki.wp.molbi.service.interfaces.AdminStudentRequestService;
 import mk.ukim.finki.wp.molbi.service.interfaces.RequestSessionService;
 import mk.ukim.finki.wp.molbi.service.specifications.FieldFilterSpecification;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class RequestSessionServiceImpl implements RequestSessionService {
 
     private final RequestSessionRepository repository;
     private final SemesterRepository semesterRepository;
+    private final AdminStudentRequestService adminStudentRequestService;
 
     @Override
     public List<RequestSession> findAll(){
@@ -201,5 +203,14 @@ public class RequestSessionServiceImpl implements RequestSessionService {
         return repository.findAll(
                 (root, query, cb) -> root.get("requestType").in(types)
         );
+    }
+    @Override
+    public void delete(Long id) {
+        if (adminStudentRequestService.existsBySession(id)) {
+            throw new IllegalStateException(
+                    "Сесијата не може да се избрише бидејќи има поднесени молби.");
+        }
+
+        repository.deleteById(id);
     }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.wp.molbi.model.base.User;
 import mk.ukim.finki.wp.molbi.model.requests.StudentRequest;
 import mk.ukim.finki.wp.molbi.repository.UserRepository;
-import mk.ukim.finki.wp.molbi.service.email.EmailService;
+import mk.ukim.finki.wp.molbi.service.implementations.EmailService;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

@@ -42,4 +42,10 @@ public class ChangeStudyProgramStudentRequestServiceImpl
         populateBaseFields(request, sessionId, student);
         return repository.save(request);
     }
+
+    @Override
+    public boolean existsBySessionId(Long sessionId) {
+        return repository.existsByRequestSession_Id(sessionId);
+    }
+
 }

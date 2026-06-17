@@ -7,4 +7,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface StudentRequestRepository<T extends StudentRequest>
         extends JpaSpecificationRepository<T, Long> {
+    boolean existsByRequestSession_Id(Long sessionId);
 }

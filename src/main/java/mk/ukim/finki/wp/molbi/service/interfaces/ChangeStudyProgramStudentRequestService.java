@@ -7,4 +7,5 @@ public interface ChangeStudyProgramStudentRequestService
     ChangeStudyProgramStudentRequest create(Long sessionId, String studentId,
                                             String description,
                                             String newProgramId, String oldProgramId);
+     boolean existsBySessionId(Long sessionId);
 }

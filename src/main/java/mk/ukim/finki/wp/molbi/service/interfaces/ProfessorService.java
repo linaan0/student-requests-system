@@ -14,6 +14,6 @@ public interface ProfessorService {
     Professor getProfessorById(String id) throws ProfessorNotFoundException;
 
     List<Professor> findProfessorsByTitle(ProfessorTitle title);
-//    List<Professor> findProfessorsWithAllocations();
+
     List<Professor> findAll();
 }

@@ -74,6 +74,7 @@ public abstract class StudentRequestServiceImpl<T extends StudentRequest>
         request.setIsApproved(true);
         T saved = repository.save(request);
         eventPublisher.publishEvent(new RequestStatusChangedEvent(saved));
+
         return saved;
     }
 
@@ -111,7 +112,5 @@ public abstract class StudentRequestServiceImpl<T extends StudentRequest>
         request.setRequestSession(session);
         request.setStudent(student);
         request.setDateCreated(LocalDate.now());
-        request.setIsApproved(null);
-        request.setIsProcessed(null);
     }
 }

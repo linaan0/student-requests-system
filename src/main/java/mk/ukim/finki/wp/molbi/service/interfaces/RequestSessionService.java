@@ -36,6 +36,7 @@ public interface RequestSessionService {
 
     List<RequestSession> findAllByTypes(List<RequestType> types);
 
+    void delete(Long id);
 
 
 }

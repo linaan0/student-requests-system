@@ -127,4 +127,13 @@ public class AdminStudentRequestServiceImpl implements AdminStudentRequestServic
                     courseEnrollmentWithoutRequirementsService.markAsProcessed(id);
         };
     }
+    @Override
+    public boolean existsBySession(Long sessionId) {
+        return generalService.existsBySessionId(sessionId)
+                || installmentService.existsBySessionId(sessionId)
+                || changeStudyProgramService.existsBySessionId(sessionId)
+                || courseGroupChangeService.existsBySessionId(sessionId)
+                || lateCourseEnrollmentService.existsBySessionId(sessionId)
+                || courseEnrollmentWithoutRequirementsService.existsBySessionId(sessionId);
+    }
 }

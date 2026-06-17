@@ -16,8 +16,8 @@
     <p><b>Опис:</b> <span th:text="${!s.description.isBlank()}?${s.description}:'Нема опис'"></span></p>
     <p><b>Забелешка за одобрување:</b> <span th:text="${!s.approvalNote.isBlank()}?${s.approvalNote}:'Нема забелешка'"></span></p>
 
-    <a th:href="@{'/admin/sessions/' + ${s.id} + '/edit'}" class="btn btn-primary me-3">Уреди</a>
     <a th:href="@{/admin/sessions}" class="btn btn-secondary">Назад</a>
+    <a th:href="@{'/admin/sessions/' + ${s.id} + '/edit'}" class="btn btn-primary mx-2">Уреди</a>
 </div>
 </body>
 </html>

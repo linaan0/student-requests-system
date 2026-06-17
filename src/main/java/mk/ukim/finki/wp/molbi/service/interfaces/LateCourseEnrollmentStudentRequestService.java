@@ -14,7 +14,7 @@ public interface LateCourseEnrollmentStudentRequestService extends StudentReques
 
     LateCourseEnrollmentStudentRequest rejectByProfessor(Long id);
 
-    public Page<LateCourseEnrollmentStudentRequest> findAllByProfessor(
+    Page<LateCourseEnrollmentStudentRequest> findAllByProfessor(
             Professor professor,
             int pageNum,
             int pageSize,
@@ -23,4 +23,5 @@ public interface LateCourseEnrollmentStudentRequestService extends StudentReques
             Boolean isProcessed,
             Long sessionId);
 
+    public boolean existsBySessionId(Long sessionId);
 }

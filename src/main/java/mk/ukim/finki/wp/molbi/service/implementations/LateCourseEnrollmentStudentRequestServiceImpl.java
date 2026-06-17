@@ -129,4 +129,8 @@ public class LateCourseEnrollmentStudentRequestServiceImpl
 
         return repository.findAll(spec, pageable);
     }
+    @Override
+    public boolean existsBySessionId(Long sessionId) {
+        return repository.existsByRequestSession_Id(sessionId);
+    }
 }

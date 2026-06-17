@@ -6,4 +6,5 @@ public interface CourseEnrollmentWithoutRequirementsStudentRequestService extend
     CourseEnrollmentWithoutRequirementsStudentRequest create(Long sessionId, String studentId,
                                                              String description,
                                                              String joinedSubjectId);
+     boolean existsBySessionId(Long sessionId);
 }

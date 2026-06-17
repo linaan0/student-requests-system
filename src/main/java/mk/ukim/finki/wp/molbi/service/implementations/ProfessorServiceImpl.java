@@ -6,6 +6,7 @@ import mk.ukim.finki.wp.molbi.model.base.Professor;
 import mk.ukim.finki.wp.molbi.model.enums.ProfessorTitle;
 import mk.ukim.finki.wp.molbi.model.exceptions.ProfessorNotFoundException;
 import mk.ukim.finki.wp.molbi.repository.ProfessorRepository;
+import mk.ukim.finki.wp.molbi.repository.TeacherSubjectAllocationsRepository;
 import mk.ukim.finki.wp.molbi.service.interfaces.ProfessorService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProfessorServiceImpl implements ProfessorService {
     private final ProfessorRepository professorRepository;
+    private final TeacherSubjectAllocationsRepository allocationRepository;
 
     @Override
     public List<Professor> getAllProfessors() {

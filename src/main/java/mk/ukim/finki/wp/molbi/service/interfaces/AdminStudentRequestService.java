@@ -21,4 +21,6 @@ public interface AdminStudentRequestService {
     StudentRequest reject(Long id, RequestType type, String reason);
 
     StudentRequest markAsProcessed(Long id, RequestType type);
+
+    boolean existsBySession(Long sessionId);
 }

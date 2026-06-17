@@ -7,4 +7,6 @@ import java.util.List;
 public interface SemesterService {
     List<Semester> findAll();
 
+    List<Semester> findActive();
+
 }

@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,8 +58,8 @@ public class AdminRequestSessionController {
                           Model model) {
         AppRole role = userDetails.getUser().getRole().getApplicationRole();
         model.addAttribute("form", new RequestSessionDto());
-        model.addAttribute("semesters", semesterService.findAll());
-        model.addAttribute("requestTypes", RequestType.forRole(role));  // само неговите типови
+        model.addAttribute("semesters", semesterService.findActive());
+        model.addAttribute("requestTypes", RequestType.forRole(role));
         return "admin/sessions/form";
     }
 
@@ -66,8 +68,8 @@ public class AdminRequestSessionController {
                          BindingResult bindingResult,
                          Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("form", form);  // експлицитно
-            model.addAttribute("semesters", semesterService.findAll());
+            model.addAttribute("form", form);
+            model.addAttribute("semesters", semesterService.findActive());
             model.addAttribute("requestTypes", RequestType.values());
             return "admin/sessions/form";
         }
@@ -76,7 +78,7 @@ public class AdminRequestSessionController {
             return "redirect:/admin/sessions";
         } catch (IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("semesters", semesterService.findAll());
+            model.addAttribute("semesters", semesterService.findActive());
             model.addAttribute("requestTypes", RequestType.values());
             return "admin/sessions/form";
         }
@@ -84,7 +86,7 @@ public class AdminRequestSessionController {
 
     @GetMapping("/{id}")
     public String details(@PathVariable Long id, Model model) {
-        RequestSession requestSession= requestSessionService.findById(id);
+        RequestSession requestSession = requestSessionService.findById(id);
         model.addAttribute("s", requestSession);
         return "admin/sessions/details";
     }
@@ -102,7 +104,7 @@ public class AdminRequestSessionController {
         );
         model.addAttribute("form", form);
         model.addAttribute("sessionId", id);
-        model.addAttribute("semesters", semesterService.findAll());
+        model.addAttribute("semesters", semesterService.findActive());
         model.addAttribute("requestTypes", RequestType.values());
         return "admin/sessions/form";
     }
@@ -113,9 +115,9 @@ public class AdminRequestSessionController {
                          BindingResult bindingResult,
                          Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("form", form);  // додај ова
+            model.addAttribute("form", form);
             model.addAttribute("sessionId", id);
-            model.addAttribute("semesters", semesterService.findAll());
+            model.addAttribute("semesters", semesterService.findActive());
             model.addAttribute("requestTypes", RequestType.values());
             return "admin/sessions/form";
         }
@@ -125,10 +127,26 @@ public class AdminRequestSessionController {
         } catch (IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("sessionId", id);
-            model.addAttribute("semesters", semesterService.findAll());
+            model.addAttribute("semesters", semesterService.findActive());
             model.addAttribute("requestTypes", RequestType.values());
             return "admin/sessions/form";
         }
+
     }
 
+    @PostMapping("/{id}/delete")
+    public String deleteSession(@PathVariable Long id,
+                                RedirectAttributes redirectAttributes) {
+
+        try {
+            requestSessionService.delete(id);
+        } catch (IllegalStateException ex) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    ex.getMessage()
+            );
+        }
+
+        return "redirect:/admin/sessions";
+    }
 }

@@ -170,12 +170,12 @@
             </tr>
             </tbody>
         </table>
-<div th:if="${!requests.isEmpty()}">
-        <div
-             th:replace="~{fragments/paging :: pageSection(${requests})}">
+        <div th:if="${!requests.isEmpty()}">
+            <div
+                    th:replace="~{fragments/paging :: pageSection(${requests})}">
+            </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

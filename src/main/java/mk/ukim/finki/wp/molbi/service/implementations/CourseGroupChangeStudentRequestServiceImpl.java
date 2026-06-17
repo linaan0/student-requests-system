@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CourseGroupChangeStudentRequestServiceImpl
-extends StudentRequestServiceImpl<CourseGroupChangeStudentRequest>
+        extends StudentRequestServiceImpl<CourseGroupChangeStudentRequest>
         implements CourseGroupChangeStudentRequestService {
 
     private final JoinedSubjectRepository joinedSubjectRepository;
@@ -45,5 +45,9 @@ extends StudentRequestServiceImpl<CourseGroupChangeStudentRequest>
         request.setNewProfessor(newProfessor);
         populateBaseFields(request, sessionId, student);
         return repository.save(request);
+    }
+    @Override
+    public boolean existsBySessionId(Long sessionId) {
+        return repository.existsByRequestSession_Id(sessionId);
     }
 }

@@ -8,7 +8,6 @@ import mk.ukim.finki.wp.molbi.service.interfaces.SemesterService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-
 @Service
 @AllArgsConstructor
 public class SemesterServiceImpl implements SemesterService {

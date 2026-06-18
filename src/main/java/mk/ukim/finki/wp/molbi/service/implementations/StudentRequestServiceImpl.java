@@ -6,16 +6,13 @@ import mk.ukim.finki.wp.molbi.event.RequestStatusChangedEvent;
 import mk.ukim.finki.wp.molbi.model.base.Student;
 import mk.ukim.finki.wp.molbi.model.requests.RequestSession;
 import mk.ukim.finki.wp.molbi.model.requests.StudentRequest;
-import mk.ukim.finki.wp.molbi.repository.RequestSessionRepository;
-import mk.ukim.finki.wp.molbi.repository.StudentRepository;
-import mk.ukim.finki.wp.molbi.repository.StudentRequestRepository;
+import mk.ukim.finki.wp.molbi.repository.*;
 import mk.ukim.finki.wp.molbi.service.interfaces.StudentRequestService;
 import mk.ukim.finki.wp.molbi.service.specifications.FieldFilterSpecification;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,11 +24,11 @@ public abstract class StudentRequestServiceImpl<T extends StudentRequest>
 
     protected final StudentRequestRepository<T> repository;
     protected final RequestSessionRepository requestSessionRepository;
-    protected final StudentRepository studentRepository;
-    protected final ApplicationEventPublisher eventPublisher;
+    protected final StudentRepository studentRepository;protected final ApplicationEventPublisher eventPublisher;
     protected StudentRequestServiceImpl(StudentRequestRepository<T> repository,
                                         RequestSessionRepository requestSessionRepository,
-                                        StudentRepository studentRepository, ApplicationEventPublisher eventPublisher) {
+                                        StudentRepository studentRepository,
+                                        ApplicationEventPublisher eventPublisher) {
         this.repository = repository;
         this.requestSessionRepository = requestSessionRepository;
         this.studentRepository = studentRepository;

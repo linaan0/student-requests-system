@@ -21,6 +21,10 @@ public class StudyProgram {
 
     private String name;
 
+    private String accreditationYear;
+
+    private String studyCycle;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

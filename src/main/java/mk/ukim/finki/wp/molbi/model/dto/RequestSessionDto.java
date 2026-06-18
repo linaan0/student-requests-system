@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class RequestSessionDto {
 
     @NotNull(message = "*Мора да изберете датум и време за почеток")
-    private LocalDateTime timeFrom;
+    private LocalDateTime timeFrom=LocalDateTime.now();
 
     @NotNull(message = "*Мора да изберете датум и време за крај")
     private LocalDateTime timeTo;

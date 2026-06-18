@@ -24,5 +24,4 @@ public class MolbiApplication {
         return new LayoutDialect();
     }
 
-
 }

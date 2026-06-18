@@ -13,9 +13,18 @@ import java.util.List;
 public class StudyProgramServiceImpl implements StudyProgramService {
     private final StudyProgramRepository repository;
 
-
     @Override
     public List<StudyProgram> findAll() {
         return repository.findAll();
     }
+    @Override
+    public List<StudyProgram> findAll(String year) {
+        return repository.findAllByAccreditationYear(year);
+    }
+    @Override
+    public List<StudyProgram> findAll(String year, String studyCycle) {
+        return repository.findAllByAccreditationYearAndStudyCycle(year, studyCycle);
+    }
+
+
 }

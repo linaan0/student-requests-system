@@ -86,5 +86,4 @@ public class CourseEnrollmentWithoutRequirementsController extends BaseStudentRe
         model.addAttribute("request", request);
         return "requests/enrollment-without-requirements/details";
     }
-
 }

@@ -2,6 +2,7 @@ package mk.ukim.finki.wp.molbi.web;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.wp.molbi.config.FacultyUserDetails;
+import mk.ukim.finki.wp.molbi.model.base.Semester;
 import mk.ukim.finki.wp.molbi.model.base.Student;
 import mk.ukim.finki.wp.molbi.model.dto.RequestSummaryDto;
 import mk.ukim.finki.wp.molbi.model.enums.RequestType;
@@ -28,6 +29,7 @@ public class StudentRequestController extends BaseStudentRequestController {
     private final LateCourseEnrollmentStudentRequestService lateCourseEnrollmentService;
     private final CourseEnrollmentWithoutRequirementsStudentRequestService courseEnrollmentService;
     private final RequestSessionService requestSessionService;
+    private final SemesterService semesterService;
 
     @GetMapping
     public String myRequests(@AuthenticationPrincipal FacultyUserDetails userDetails,
@@ -78,12 +80,10 @@ public class StudentRequestController extends BaseStudentRequestController {
     }
 
     @GetMapping("/new")
-    public String chooseType(Model model) {
-        Map<RequestType, RequestSession> activeSessions = new HashMap<>();
-        for (RequestType type : RequestType.values()) {
-            requestSessionService.getActiveByType(type)
-                    .ifPresent(s -> activeSessions.put(type, s));
-        }
+    public String chooseType(@AuthenticationPrincipal FacultyUserDetails userDetails,Model model) {
+        Student student = getCurrentStudent(userDetails);
+        Semester semester=semesterService.findActive().get(0);
+        Map<RequestType, RequestSession> activeSessions =requestSessionService.getActiveSessions(student, semester);
         model.addAttribute("activeSessions", activeSessions);
         return "requests/choose-type";
     }

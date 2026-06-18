@@ -39,7 +39,7 @@ public class ChangeStudyProgramController extends BaseStudentRequestController {
         form.setOldProgramId(getCurrentStudent(userDetails).getStudyProgram().getCode());
 
         model.addAttribute("session", session.get());
-        model.addAttribute("studyPrograms", studyProgramService.findAll());
+        model.addAttribute("studyPrograms",studyProgramService.findAll(getCurrentStudent(userDetails).getStudyProgram().getAccreditationYear(), getCurrentStudent(userDetails).getStudyProgram().getStudyCycle()));
         model.addAttribute("currentProgram", getCurrentStudent(userDetails).getStudyProgram());
         model.addAttribute("form", form);
 
@@ -52,7 +52,10 @@ public class ChangeStudyProgramController extends BaseStudentRequestController {
                          @AuthenticationPrincipal FacultyUserDetails userDetails,
                          Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("studyPrograms", studyProgramService.findAll());
+            model.addAttribute("session", requestSessionService.findById(form.getSessionId()));
+            model.addAttribute("studyPrograms",studyProgramService.findAll(getCurrentStudent(userDetails).getStudyProgram().getAccreditationYear(), getCurrentStudent(userDetails).getStudyProgram().getStudyCycle()));
+            model.addAttribute("currentProgram", getCurrentStudent(userDetails).getStudyProgram());
+            model.addAttribute("form", form);
             return "requests/change-program/form";
         }
         try {
@@ -67,7 +70,10 @@ public class ChangeStudyProgramController extends BaseStudentRequestController {
             return "redirect:/requests";
         } catch (IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("studyPrograms", studyProgramService.findAll());
+            model.addAttribute("session", requestSessionService.findById(form.getSessionId()));
+            model.addAttribute("studyPrograms",studyProgramService.findAll(getCurrentStudent(userDetails).getStudyProgram().getAccreditationYear(), getCurrentStudent(userDetails).getStudyProgram().getStudyCycle()));
+            model.addAttribute("currentProgram", getCurrentStudent(userDetails).getStudyProgram());
+            model.addAttribute("form", form);
             return "requests/change-program/form";
         }
     }

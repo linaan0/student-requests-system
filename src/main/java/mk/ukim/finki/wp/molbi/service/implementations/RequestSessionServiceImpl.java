@@ -2,12 +2,11 @@ package mk.ukim.finki.wp.molbi.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.wp.molbi.model.base.Semester;
+import mk.ukim.finki.wp.molbi.model.base.*;
 import mk.ukim.finki.wp.molbi.model.dto.RequestSessionDto;
 import mk.ukim.finki.wp.molbi.model.enums.RequestType;
 import mk.ukim.finki.wp.molbi.model.requests.RequestSession;
-import mk.ukim.finki.wp.molbi.repository.RequestSessionRepository;
-import mk.ukim.finki.wp.molbi.repository.SemesterRepository;
+import mk.ukim.finki.wp.molbi.repository.*;
 import mk.ukim.finki.wp.molbi.service.interfaces.AdminStudentRequestService;
 import mk.ukim.finki.wp.molbi.service.interfaces.RequestSessionService;
 import mk.ukim.finki.wp.molbi.service.specifications.FieldFilterSpecification;
@@ -19,8 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +27,10 @@ public class RequestSessionServiceImpl implements RequestSessionService {
     private final RequestSessionRepository repository;
     private final SemesterRepository semesterRepository;
     private final AdminStudentRequestService adminStudentRequestService;
+    private final StudentGroupRepository studentGroupRepository;
+    private final StudentSubjectEnrollmentRepository enrollmentRepository;
+    private final StudentGradeRepository studentGradeRepository;
+
 
     @Override
     public List<RequestSession> findAll(){
@@ -130,6 +132,7 @@ public class RequestSessionServiceImpl implements RequestSessionService {
 
     @Override
     public Optional<RequestSession> getActiveByType(RequestType type) {
+
         LocalDateTime now = LocalDateTime.now();
 
         Specification<RequestSession> spec = Specification
@@ -143,23 +146,6 @@ public class RequestSessionServiceImpl implements RequestSessionService {
         return repository.findAll(spec)
                 .stream()
                 .findFirst();
-    }
-
-    @Override
-    public RequestSession getActiveSessions() {
-        LocalDateTime now = LocalDateTime.now();
-
-        Specification<RequestSession> spec = Specification
-                .<RequestSession>where((root, query, cb) ->
-                        cb.lessThanOrEqualTo(root.get("timeFrom"), now))
-                .and((root, query, cb) ->
-                        cb.greaterThanOrEqualTo(root.get("timeTo"), now));
-
-        return repository.findAll(spec)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "No active sessions"));
     }
 
     @Override
@@ -204,6 +190,7 @@ public class RequestSessionServiceImpl implements RequestSessionService {
                 (root, query, cb) -> root.get("requestType").in(types)
         );
     }
+
     @Override
     public void delete(Long id) {
         if (adminStudentRequestService.existsBySession(id)) {
@@ -213,4 +200,39 @@ public class RequestSessionServiceImpl implements RequestSessionService {
 
         repository.deleteById(id);
     }
+
+    public Short determineStudentYearViaEnrollment(Student student, Semester semester)
+    {
+        List<StudentSubjectEnrollment> enrollments = enrollmentRepository
+                .findByStudentAndSemester(student, semester);
+
+        return enrollments.stream()
+                .filter(e -> e.getGroupId() != null)
+                .findFirst()
+                .flatMap(e -> studentGroupRepository.findById(e.getGroupId()))
+                .map(StudentGroup::getStudyYear).orElseThrow(()-> new EntityNotFoundException("Студентот нема запишани предмети"));
+    }
+    @Override
+    public Double getNumberOfCredits(Student student){
+        List<StudentGrade> grades=studentGradeRepository.findAllByStudent(student);
+
+        return grades.stream().mapToDouble(g->g.credits).sum();
+    }
+
+    @Override
+    public Map<RequestType, RequestSession> getActiveSessions(Student student, Semester semester){
+
+        Map<RequestType, RequestSession> activeSessions = new HashMap<>();
+        for (RequestType type : RequestType.values()) {
+            if(!(type==RequestType.COURSE_GROUP_CHANGE && determineStudentYearViaEnrollment(student,semester)!=1)&&
+                    !(type==RequestType.COURSE_ENROLLMENT_WITHOUT_REQUIREMENTS&&
+                            (!Objects.equals(student.getStudyProgram().getAccreditationYear(), "2018")||
+                                    getNumberOfCredits(student)<=180))
+            ) {
+                getActiveByType(type).ifPresent(s -> activeSessions.put(type, s));
+            }
+        }
+        return activeSessions;
+    }
+
 }

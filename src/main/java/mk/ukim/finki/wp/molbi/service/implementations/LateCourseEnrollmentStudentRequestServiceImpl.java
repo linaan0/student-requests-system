@@ -1,10 +1,8 @@
 package mk.ukim.finki.wp.molbi.service.implementations;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.wp.molbi.model.base.JoinedSubject;
-import mk.ukim.finki.wp.molbi.model.base.Professor;
-import mk.ukim.finki.wp.molbi.model.base.Student;
+import mk.ukim.finki.wp.molbi.event.RequestStatusChangedEvent;
+import mk.ukim.finki.wp.molbi.model.base.*;
 import mk.ukim.finki.wp.molbi.model.enums.RequestType;
 import mk.ukim.finki.wp.molbi.model.requests.LateCourseEnrollmentStudentRequest;
 import mk.ukim.finki.wp.molbi.repository.*;
@@ -26,11 +24,13 @@ public class LateCourseEnrollmentStudentRequestServiceImpl
 
     private final JoinedSubjectRepository joinedSubjectRepository;
     private final ProfessorRepository professorRepository;
+    private final StudentSubjectEnrollmentRepository studentSubjectEnrollmentRepository;
 
-    protected LateCourseEnrollmentStudentRequestServiceImpl(StudentRequestRepository<LateCourseEnrollmentStudentRequest> repository, RequestSessionRepository requestSessionRepository, StudentRepository studentRepository, JoinedSubjectRepository joinedSubjectRepository, ProfessorRepository professorRepository, ApplicationEventPublisher eventPublisher) {
+    protected LateCourseEnrollmentStudentRequestServiceImpl(StudentRequestRepository<LateCourseEnrollmentStudentRequest> repository, RequestSessionRepository requestSessionRepository, StudentRepository studentRepository, JoinedSubjectRepository joinedSubjectRepository, ProfessorRepository professorRepository, ApplicationEventPublisher eventPublisher, StudentSubjectEnrollmentRepository studentSubjectEnrollmentRepository) {
         super(repository, requestSessionRepository, studentRepository, eventPublisher);
         this.joinedSubjectRepository = joinedSubjectRepository;
         this.professorRepository = professorRepository;
+        this.studentSubjectEnrollmentRepository = studentSubjectEnrollmentRepository;
     }
 
     @Override
@@ -70,8 +70,41 @@ public class LateCourseEnrollmentStudentRequestServiceImpl
     @Override
     public LateCourseEnrollmentStudentRequest approve(Long id) {
         LateCourseEnrollmentStudentRequest request = findById(id);
+        JoinedSubject joinedSubject = request.getJoinedSubject();
+        Student student = request.getStudent();
+        Semester semester = request.getRequestSession().getSemester();
+        Subject subject = joinedSubject.getMainSubject();
+
+        String enrollmentId = String.format("%s-%s-%s",
+                semester.getCode(), student.getIndex(), subject.getId());
+
+        StudentSubjectEnrollment enrollment = studentSubjectEnrollmentRepository.findById(enrollmentId)
+                .orElse(null);
+
+        if (enrollment == null) {
+            enrollment = new StudentSubjectEnrollment(semester, student, subject);
+            enrollment.setJoinedSubject(joinedSubject);
+            enrollment.setValid(true);
+        } else {
+            if (Boolean.TRUE.equals(enrollment.getValid())) {
+                throw new IllegalStateException(
+                        "Student already has a valid enrollment for this subject");
+            }
+            enrollment.setValid(true);
+            enrollment.setInvalidNote(null);
+            enrollment.setJoinedSubject(joinedSubject);
+        }
+
+        studentSubjectEnrollmentRepository.save(enrollment);
+
         request.setIsApproved(true);
-        return repository.save(request);
+        markAsProcessed(id);
+        request.setDateProcessed(LocalDate.now());
+
+        LateCourseEnrollmentStudentRequest saved = repository.save(request);
+        eventPublisher.publishEvent(new RequestStatusChangedEvent(saved));
+
+        return saved;
     }
 
     @Override

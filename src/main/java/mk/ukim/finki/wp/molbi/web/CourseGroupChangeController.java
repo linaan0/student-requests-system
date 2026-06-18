@@ -47,11 +47,13 @@ public class CourseGroupChangeController extends BaseStudentRequestController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute @Valid CourseGroupChangeForm form,
+    public String create(@ModelAttribute("form") @Valid CourseGroupChangeForm form,
                          BindingResult bindingResult,
                          @AuthenticationPrincipal FacultyUserDetails userDetails,
                          Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("form", form);
+            model.addAttribute("session", requestSessionService.findById(form.getSessionId()));
             model.addAttribute("subjects", joinedSubjectService.findAll());
             model.addAttribute("professors", professorService.findAll());
             return "requests/course-group-change/form";
@@ -68,6 +70,8 @@ public class CourseGroupChangeController extends BaseStudentRequestController {
             );
             return "redirect:/requests";
         } catch (IllegalStateException e) {
+            model.addAttribute("form", form);
+            model.addAttribute("session", requestSessionService.findById(form.getSessionId()));
             model.addAttribute("error", e.getMessage());
             model.addAttribute("subjects", joinedSubjectService.findAll());
             model.addAttribute("professors", professorService.findAll());
@@ -84,6 +88,4 @@ public class CourseGroupChangeController extends BaseStudentRequestController {
         model.addAttribute("request", request);
         return "requests/course-group-change/details";
     }
-
-
 }
